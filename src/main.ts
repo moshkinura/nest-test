@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-// import { AppModule } from './app.module';
-import { UsersModule } from './users/users.module'
+import { AppModule } from './app.module';
+import { UsersModule } from './users/users.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(UsersModule);
+  const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
     .setTitle('User example')
@@ -14,7 +14,9 @@ async function bootstrap() {
     .build()
 
   const documentUsers = SwaggerModule.createDocument(app, config, {
-    include: [UsersModule]
+    include: [
+      UsersModule,
+    ]
   })
 
   SwaggerModule.setup('api', app, documentUsers)
