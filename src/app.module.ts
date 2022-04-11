@@ -1,8 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UsersController } from './users/users.controller';
-import { UsersService } from './users/users.service'
-import { UsersModule } from './users/users.module';
+import { UsersController } from './users/users.controller'
+import { UsersModule } from './users/users.module'
 
 import { config } from './orm.config'
 
@@ -15,4 +14,5 @@ import { config } from './orm.config'
     UsersController,
   ],
 })
+
 export class AppModule { }

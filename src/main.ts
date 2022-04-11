@@ -1,27 +1,22 @@
-import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
-import { UsersModule } from './users/users.module';
+import { NestFactory } from '@nestjs/core'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { AppModule } from './app.module'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule)
 
   const config = new DocumentBuilder()
-    .setTitle('User example')
-    .setDescription('The user API description')
+    .setTitle('API example')
+    .setDescription('The API description')
     .setVersion('1.0')
-    .addTag('users')
     .build()
 
-  const documentUsers = SwaggerModule.createDocument(app, config, {
-    include: [
-      UsersModule,
-    ]
-  })
+  const document = SwaggerModule.createDocument(app, config)
 
-  SwaggerModule.setup('api', app, documentUsers)
+  SwaggerModule.setup('api', app, document)
 
   await app.listen(3000)
+  console.log(`Application is running on ${await app.getUrl()}/api`)
 }
 
 bootstrap()
