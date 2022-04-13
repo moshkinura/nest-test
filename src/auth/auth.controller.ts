@@ -11,13 +11,16 @@ import {
   Headers,
   Header
 } from '@nestjs/common'
+
 import {
   ApiTags,
   ApiOperation,
   ApiHeader,
   ApiBody,
 } from '@nestjs/swagger'
+
 import { AuthService } from './auth.service'
+
 import { TokenDto } from './dto/token.dto'
 
 @ApiTags('auth')
@@ -40,7 +43,7 @@ export class AuthController {
     description: 'the description',
   })
   @ApiHeader({ name: 'x-request-id' })
-  getUnlink(@Headers('x-request-id') id: any) {
+  getUnlink(@Headers('x-request-id') id: string) {
     return this.authService.getUnlink(id)
   }
 
