@@ -18,7 +18,7 @@ export class DevicesService {
           {
             id: '111',
             name: 'имя',
-            type: TypeDevice['devices.types.other'],
+            type: TypeDevice.other,
           }
         ]
       }
