@@ -11,7 +11,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     TypeOrmModule.forRoot(config),
     // UsersModule,
-    // DevicesModule,
+    DevicesModule,
     AuthModule,
   ],
   // controllers: [

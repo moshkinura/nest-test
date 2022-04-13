@@ -14,6 +14,7 @@ async function bootstrap() {
     .setTitle('SmartHome IOT Alice Dialogs')
     .setDescription('The API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
