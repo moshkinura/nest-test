@@ -3,6 +3,8 @@ import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 
+// import * as csurf from 'csurf'
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
@@ -10,11 +12,24 @@ async function bootstrap() {
     type: VersioningType.URI,
   })
 
+  app.enableCors()
+  // app.use(csurf())
+
   const config = new DocumentBuilder()
     .setTitle('SmartHome IOT Alice Dialogs')
     .setDescription('The API description')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'Bearer',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'Header',
+      },
+      'token'
+    )
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
