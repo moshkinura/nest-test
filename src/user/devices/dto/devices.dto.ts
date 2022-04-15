@@ -73,6 +73,7 @@ export class DevicesDto {
 
   @ApiProperty({
     description: 'Дополнительная техническая информация об устройстве.',
+    type: () => DeviceInfoDto
   })
   device_info?: DeviceInfoDto
 }

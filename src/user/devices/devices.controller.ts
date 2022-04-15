@@ -7,7 +7,11 @@ import {
   Param,
   Delete,
   Headers,
+  UseGuards,
+  Req,
 } from '@nestjs/common'
+
+import { Request } from 'express'
 
 import {
   ApiTags,
@@ -25,6 +29,7 @@ import { AllDevicesDto } from './dto/all-devices.dto'
   path: 'user/devices',
   version: '1.0'
 })
+@ApiBearerAuth('token')
 export class DevicesController {
   constructor(private readonly devicesService: DevicesService) { }
 
@@ -34,8 +39,35 @@ export class DevicesController {
     description: 'the description'
   })
   @ApiHeader({ name: 'x-request-id' })
-  @ApiBearerAuth()
-  getDevices(@Headers('x-request-id') id: string, @Headers() headers: object): AllDevicesDto {
-    return this.devicesService.getDevices(headers)
+  
+  // @UseGuards(JwtAuthenticationGuard)
+  getDevices(@Headers('x-request-id') id: string, @Req() request: Request): AllDevicesDto {
+    const authorization = request?.headers?.authorization?.replace('Bearer', '')
+    
+    return this.devicesService.getDevices(id, authorization)
+  }
+
+  @Post('query')
+  @ApiOperation({
+    summary: 'Device status information',
+    description: 'the description'
+  })
+  @ApiHeader({ name: 'x-request-id' })
+  postDevicesQuery(@Headers('x-request-id') id: string, @Req() request: Request): AllDevicesDto {
+    const authorization = request?.headers?.authorization?.replace('Bearer', '')
+
+    return this.devicesService.postDevicesQuery(id, authorization)
+  }
+
+  @Post('action')
+  @ApiOperation({
+    summary: 'Changing the state of the device',
+    description: 'the description'
+  })
+  @ApiHeader({ name: 'x-request-id' })
+  postDevicesAction(@Headers('x-request-id') id: string, @Req() request: Request): AllDevicesDto {
+    const authorization = request?.headers?.authorization?.replace('Bearer', '')
+
+    return this.devicesService.postDevicesAction(id, authorization)
   }
 }

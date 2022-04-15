@@ -9,8 +9,12 @@ export class AllDevicesDto {
   })
   request_id: string
 
-  @ApiProperty({
-    description: 'Объект с устройствами.',
-  })
+  @ApiProperty(
+    {
+      description: 'Массив',
+      type: () => PayloadDto
+    }
+  )
   payload?: PayloadDto
+
 }
