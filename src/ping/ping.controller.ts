@@ -7,9 +7,6 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiHeader,
-  ApiBody,
-  ApiBearerAuth,
   ApiResponse,
 } from '@nestjs/swagger'
 import { Response } from 'express'
