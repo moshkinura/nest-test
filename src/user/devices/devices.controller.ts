@@ -2,10 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
   Headers,
   UseGuards,
   Req,
@@ -17,12 +13,13 @@ import {
   ApiTags,
   ApiOperation,
   ApiHeader,
-  ApiBody,
   ApiBearerAuth,
 } from '@nestjs/swagger'
 
 import { DevicesService } from './devices.service'
 import { AllDevicesDto } from './dto/all-devices.dto'
+
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 
 @ApiTags('user/devices')
 @Controller({
@@ -33,39 +30,40 @@ import { AllDevicesDto } from './dto/all-devices.dto'
 export class DevicesController {
   constructor(private readonly devicesService: DevicesService) { }
 
+  @UseGuards(JwtAuthGuard)
   @Get('')
   @ApiOperation({
     summary: 'Get devices all',
     description: 'the description'
   })
   @ApiHeader({ name: 'x-request-id' })
-  
-  // @UseGuards(JwtAuthenticationGuard)
-  getDevices(@Headers('x-request-id') id: string, @Req() request: Request): AllDevicesDto {
-    const authorization = request?.headers?.authorization?.replace('Bearer', '')
-    
+  getDevices(@Headers('x-request-id') id: string, @Req() request: Request): Promise<AllDevicesDto> {
+    const authorization = request?.headers?.authorization?.split('Bearer ')[1]
+
     return this.devicesService.getDevices(id, authorization)
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('query')
   @ApiOperation({
     summary: 'Device status information',
     description: 'the description'
   })
   @ApiHeader({ name: 'x-request-id' })
-  postDevicesQuery(@Headers('x-request-id') id: string, @Req() request: Request): AllDevicesDto {
+  postDevicesQuery(@Headers('x-request-id') id: string, @Req() request: Request): Promise<AllDevicesDto> {
     const authorization = request?.headers?.authorization?.replace('Bearer', '')
 
     return this.devicesService.postDevicesQuery(id, authorization)
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('action')
   @ApiOperation({
     summary: 'Changing the state of the device',
     description: 'the description'
   })
   @ApiHeader({ name: 'x-request-id' })
-  postDevicesAction(@Headers('x-request-id') id: string, @Req() request: Request): AllDevicesDto {
+  postDevicesAction(@Headers('x-request-id') id: string, @Req() request: Request): Promise<AllDevicesDto> {
     const authorization = request?.headers?.authorization?.replace('Bearer', '')
 
     return this.devicesService.postDevicesAction(id, authorization)
