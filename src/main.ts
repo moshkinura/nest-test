@@ -13,7 +13,6 @@ async function bootstrap() {
   })
 
   app.enableCors()
-  // app.use(csurf())
 
   const config = new DocumentBuilder()
     .setTitle('SmartHome IOT Alice Dialogs')
