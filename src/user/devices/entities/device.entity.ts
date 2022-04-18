@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity()
+// @Entity()
 export class Device {
   // @PrimaryGeneratedColumn()
   // id: number

@@ -26,11 +26,11 @@ export class DevicesService {
     const payload: PAYLOAD = token.payload
 
     console.log(payload)
-    await this.deviceRepository.findOne(
-      {
-        where: { id: payload.sub }
-      }
-    )
+    // await this.deviceRepository.findOne(
+    //   {
+    //     where: { id: payload.sub }
+    //   }
+    // )
     return {
       request_id: id,
       payload: {
