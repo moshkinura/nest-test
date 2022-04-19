@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 
 import { Device } from '../../user/devices/entities/device.entity'
+
 @Entity()
 export class Auth {
   @PrimaryGeneratedColumn()
