@@ -1,0 +1,72 @@
+[{
+  "_id": {
+    "$oid": "60300a886241ef3dd6dabeec"
+  },
+  "id_device": {
+    "$oid": "602efc0b6241ef3dd6dabeea"
+  },
+  "capabilities": [
+    {
+      "type": "devices.capabilities.on_off",
+      "state": {
+        "instance": "on",
+        "value": true
+      }
+    }
+  ],
+  "properties": [
+    {
+      "type": "devices.properties.float",
+      "state": {
+        "instance": "temperature",
+        "value": 23.9
+      }
+    },
+    {
+      "type": "devices.properties.float",
+      "state": {
+        "instance": "humidity",
+        "value": 25.1
+      }
+    },
+    {
+      "type": "devices.properties.event",
+      "state": {
+        "instance": "open",
+        "value": "opened"
+      }
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "6030f7f806a52d3d8c7d6617"
+  },
+  "id_device": {
+    "$oid": "602fe3884696ab104cbadd0f"
+  },
+  "capabilities": [
+    {
+      "type": "devices.capabilities.on_off",
+      "state": {
+        "instance": "on",
+        "value": false
+      }
+    }
+  ],
+  "properties": [
+    {
+      "type": "devices.properties.float",
+      "state": {
+        "instance": "temperature",
+        "value": 30.4
+      }
+    },
+    {
+      "type": "devices.properties.float",
+      "state": {
+        "instance": "humidity",
+        "value": 85
+      }
+    }
+  ]
+}]

@@ -1,6 +1,7 @@
-version: '3.9'
+version: "3.9"
 
 services:
+  # DATABASE - PostgreSQL
   db:
     image: postgres:latest
     environment:
@@ -21,6 +22,7 @@ services:
     networks:
       - postgres
 
+  # DATABASE_UI - Adminer
   adminer:
     image: adminer:latest
     restart: always
@@ -29,9 +31,54 @@ services:
     networks:
       - postgres
 
+  # DATABASE - MongoDB
+  mongodb:
+    image: mongo:latest
+    # build: ./docker_db
+    container_name: mongodb
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: passWORD12345
+    #   MONGO_INITDB_DATABASE: camelhome
+    volumes: 
+      - mongodata:/data/db
+    expose: 
+      - 27017
+    # ports: 
+    #   - 27017:27017
+    networks: 
+      - app-network
+    restart: always
+
+  # MongoDB IMPORT
+  mongo_import:
+    build: ./docker_db
+    container_name: importDB
+    depends_on: 
+      - mongodb
+    networks: 
+      - app-network
+
+  # DATABASE_UI - MongoDB_Express
+  mongodb_ui:
+    image: mongo-express:latest
+    container_name: mongodb_ui
+    env_file:
+      - ./env/mongodb_ui.env
+    ports: 
+      - 8081:8081
+    networks: 
+      - app-network
+    depends_on: 
+      - mongodb
+    restart: always
+
 volumes:
   pgdata: 
+  mongodata: ~
 
 networks:
+  app-network:
+    driver: bridge
   postgres:
     driver: bridge

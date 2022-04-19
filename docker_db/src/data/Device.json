@@ -1,0 +1,107 @@
+[{
+  "_id": {
+    "$oid": "602efc0b6241ef3dd6dabeea"
+  },
+  "id_user": {
+    "$oid": "602edcbf6241ef3dd6dabee8"
+  },
+  "uuid": "62b6ab21f1007810cdebe08421cb9199963858f1",
+  "uid": "62b6ab",
+  "name": "Свет",
+  "description": "Свет в комнате",
+  "room": "Комната",
+  "type": "devices.types.sensor",
+  "capabilities": [
+    {
+      "type": "devices.capabilities.on_off",
+      "retrievable": true,
+      "parameters": {
+        "instance": "on"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "type": "devices.properties.float",
+      "retrievable": true,
+      "reportable": true,
+      "parameters": {
+        "instance": "temperature",
+        "unit": "unit.temperature.celsius"
+      }
+    },
+    {
+      "type": "devices.properties.float",
+      "retrievable": true,
+      "reportable": true,
+      "parameters": {
+        "instance": "humidity",
+        "unit": "unit.percent"
+      }
+    },
+    {
+      "type": "devices.properties.event",
+      "retrievable": true,
+      "reportable": true,
+      "instance": "open",
+      "events": [
+        {
+          "value": "opened"
+        },
+        {
+          "value": "closed"
+        }
+      ]
+    }
+  ],
+  "device_info": {
+    "hw_version": "3.0",
+    "sw_version": "3.0"
+  }
+},{
+  "_id": {
+    "$oid": "602fe3884696ab104cbadd0f"
+  },
+  "id_user": {
+    "$oid": "602edcbf6241ef3dd6dabee8"
+  },
+  "uuid": "7b07c8ebdbc221eb1df18af92407bb4724ab001a",
+  "uid": "7b07c8",
+  "name": "Светильник",
+  "description": "Свет в предбаннике",
+  "room": "Баня",
+  "type": "devices.types.sensor",
+  "capabilities": [
+    {
+      "type": "devices.capabilities.on_off",
+      "retrievable": true,
+      "parameters": {
+        "instance": "on"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "type": "devices.properties.float",
+      "retrievable": true,
+      "reportable": true,
+      "parameters": {
+        "instance": "temperature",
+        "unit": "unit.temperature.celsius"
+      }
+    },
+    {
+      "type": "devices.properties.float",
+      "retrievable": true,
+      "reportable": true,
+      "parameters": {
+        "instance": "humidity",
+        "unit": "unit.percent"
+      }
+    }
+  ],
+  "device_info": {
+    "hw_version": "3.0",
+    "sw_version": "3.0"
+  }
+}]
