@@ -1,25 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-enum TypeCapabilities {
-  "on_off" = "devices.capabilities.on_off",
-  "color_setting" = "devices.capabilities.color_setting",
-  "video_stream" = "devices.capabilities.video_stream", //TODO: В разработке/бета тестирование
-  "mode" = "devices.capabilities.mode",
-  "range" = "devices.capabilities.range",
-  "toggle" = "devices.capabilities.toggle",
+export enum TypeCapabilities {
+  "devices.capabilities.on_off" = "devices.capabilities.on_off",
+  "devices.capabilities.color_setting" = "devices.capabilities.color_setting",
+  "devices.capabilities.video_stream" = "devices.capabilities.video_stream", //TODO: В разработке/бета тестирование
+  "devices.capabilities.mode" = "devices.capabilities.mode",
+  "devices.capabilities.range" = "devices.capabilities.range",
+  "devices.capabilities.toggle" = "devices.capabilities.toggle",
 }
 
-enum ColorModel {
+export enum ColorModel {
   "hsv" = "hsv",
   "rgb" = "rgb",
 }
 
-enum Protocol {
+export enum Protocol {
   "hls" = "hls",
   "progressive_mp4" = "progressive_mp4",
 }
 
-enum Instance {
+export enum CapInstance {
   "cleanup_mode" = "cleanup_mode",
   "coffee_mode" = "coffee_mode",
   "dishwashing" = "dishwashing",
@@ -31,18 +31,32 @@ enum Instance {
   "tea_mode" = "tea_mode",
   "thermostat" = "thermostat",
   "work_speed" = "work_speed",
-}
-
-enum Unit {
+  "on" = "on", //TODO: возможно не используется, DEPRECATED
   "brightness" = "brightness",
   "channel" = "channel",
   "humidity" = "humidity",
   "open" = "open",
   "temperature" = "temperature",
-  "volume" = "volume",
+  "volume" = "volume"
 }
 
-enum Modes {
+export enum CapUnit {
+  "unit.ampere" = "unit.ampere",
+  "unit.percent" = "unit.percent",
+  "unit.ppm" = "unit.ppm",
+  "unit.illumination.lux" = "unit.illumination.lux",
+  "unit.density.mcg_m3" = "unit.density.mcg_m3",
+  "unit.watt" = "unit.watt",
+  "unit.pressure.atm" = "unit.pressure.atm",
+  "unit.pressure.pascal" = "unit.pressure.pascal",
+  "unit.pressure.bar" = "unit.pressure.bar",
+  "unit.pressure.mmhg" = "unit.pressure.mmhg",
+  "unit.temperature.celsius" = "unit.temperature.celsius",
+  "unit.temperature.kelvin" = "unit.temperature.kelvin",
+  "unit.volt" = "unit.volt",
+}
+
+export enum Modes {
   "auto" = "auto",
   "eco" = "eco",
   "turbo" = "turbo",
@@ -142,14 +156,14 @@ export class CapabilitiesDto {
       scenes?: string[]
     }
 
-    instance?: Instance
+    instance?: CapInstance
     protocol?: Protocol
 
     modes?: {
       mode?: Modes[]
     }
 
-    unit?: Unit
+    unit?: CapUnit
     range?: {
       min?: number
       max?: number
