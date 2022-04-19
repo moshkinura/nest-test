@@ -4,12 +4,13 @@ import { DevicesController } from './devices.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { Device } from './entities/device.entity'
+import { Status } from './entities/status.entity'
 import { JwtModule } from '@nestjs/jwt'
 import { jwtConstants } from '../../auth/constants'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Device]),
+    TypeOrmModule.forFeature([Device, Status]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },

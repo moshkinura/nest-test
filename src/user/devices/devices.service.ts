@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Device } from './entities/device.entity'
+import { Status } from './entities/status.entity'
 import { AllDevicesDto } from './dto/all-devices.dto'
 import { TypeDevice } from './dto/devices.dto'
+import { PropertiesDto, TypeProperties, PropInstance , PropUnit } from './dto/properties.dto'
+import { CapabilitiesDto, CapInstance, CapUnit, TypeCapabilities } from './dto/capabilities.dto'
 
 import { JwtService } from '@nestjs/jwt'
 
@@ -14,10 +17,25 @@ export interface PAYLOAD {
   exp: number
 }
 
+export interface DEVICE_MAP {
+  id: string
+  name: string
+  description?: string
+  room?: string
+  type: TypeDevice
+  properties?: PropertiesDto[]
+  capabilities?: CapabilitiesDto[]
+  device_info?: {
+    hw_version?: string
+    sw_version?: string
+  }
+}
+
 @Injectable()
 export class DevicesService {
   constructor(
     @InjectRepository(Device) private readonly deviceRepository: Repository<Device>,
+    @InjectRepository(Status) private readonly statusRepository: Repository<Status>,
     private jwtService: JwtService
   ) { }
 
@@ -25,38 +43,110 @@ export class DevicesService {
     const token = this.jwtService.verify(authorization, { complete: true })
     const payload: PAYLOAD = token.payload
 
-    console.log(payload)
-    // await this.deviceRepository.findOne(
-    //   {
-    //     where: { id: payload.sub }
-    //   }
-    // )
+    let allDevices = await this.deviceRepository.find(
+      {
+        where: { id: payload.sub },
+        relations: ['capabilities', 'properties', 'device_info']
+      }
+    )
+
+    // TODO: Если назначить тип "devices: DEVICE_MAP[]" вылазит ошибка, string воспринимает за number
+    let devices: DEVICE_MAP[] = []
+
+    // TODO: Возможно код, ниже - костыль... И можно сделать проще...
+    allDevices.forEach((doc) => {
+      let types: TypeDevice
+      let properties: PropertiesDto[] = []
+      let capabilities: CapabilitiesDto[] = []
+      let device_info = {}
+
+      const id: string = doc.uuid
+
+      delete doc.id
+      delete doc.uuid
+
+      // TYPE
+      types = TypeDevice[doc.type]
+      delete doc.type
+
+      // PROPERTIES
+      doc.properties.forEach((prop) => {
+        const type: TypeProperties = TypeProperties[prop.type]
+        const propinstance: PropInstance = PropInstance[prop.instance]
+        const propunit: PropUnit = PropUnit[prop.unit]
+        delete prop.id
+        delete prop.type
+        delete prop.instance
+        delete prop.unit
+        properties.push({
+          ...prop,
+          type,
+          parameters: {
+            instance: propinstance,
+            unit: propunit,
+          },
+        })
+      })
+      delete doc.properties
+
+      // CAPABILITIES
+      doc.capabilities.forEach((cap) => {
+        const captype: TypeCapabilities = TypeCapabilities[cap?.type]
+        const capinstance: CapInstance = CapInstance[cap?.instance]
+        // const unit: CapUnit = CapUnit[cap?.unit]
+        delete cap.id
+        delete cap.instance
+        capabilities.push({
+          ...cap,
+          type: captype,
+          parameters: {
+            instance: capinstance,
+          },
+        })
+      })
+      delete doc.capabilities
+
+      // DEVICE_INFO
+      device_info = {
+        hw_version: doc.device_info?.hw_version,
+        sw_version: doc.device_info?.sw_version,
+      }
+      delete doc.device_info
+
+      devices.push({
+        ...doc,
+        id: id.toString(),
+        type: types,
+        properties,
+        capabilities,
+        device_info,
+      })
+    })
+
+    // console.log(devices[0].capabilities)
+    // console.log(devices)
     return {
       request_id: id,
       payload: {
-        user_id: '123',
-        devices: [
-          {
-            id: '111',
-            name: 'имя',
-            type: TypeDevice.other,
-          }
-        ]
+        user_id: payload.sub.toString(),
+        devices: devices
       }
     }
   }
 
   async postDevicesQuery(id: string, authorization: string): Promise<AllDevicesDto> {
-    const token = authorization
+    const token = this.jwtService.verify(authorization, { complete: true })
+    const payload: PAYLOAD = token.payload
+
     return {
       request_id: id,
       payload: {
-        user_id: token,
+        user_id: payload.sub.toString(),
         devices: [
           {
             id: '111',
             name: 'имя',
-            type: TypeDevice.other,
+            type: TypeDevice['devices.types.other'],
           }
         ]
       }
@@ -73,7 +163,7 @@ export class DevicesService {
           {
             id: '111',
             name: 'имя',
-            type: TypeDevice.other,
+            type: TypeDevice['devices.types.other'],
           }
         ]
       }

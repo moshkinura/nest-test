@@ -37,10 +37,10 @@ export class DevicesController {
     description: 'the description'
   })
   @ApiHeader({ name: 'x-request-id' })
-  getDevices(@Headers('x-request-id') id: string, @Req() request: Request): Promise<AllDevicesDto> {
+  async getDevices(@Headers('x-request-id') id: string, @Req() request: Request): Promise<AllDevicesDto> {
     const authorization = request?.headers?.authorization?.split('Bearer ')[1]
 
-    return this.devicesService.getDevices(id, authorization)
+    return await this.devicesService.getDevices(id, authorization)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -51,7 +51,7 @@ export class DevicesController {
   })
   @ApiHeader({ name: 'x-request-id' })
   postDevicesQuery(@Headers('x-request-id') id: string, @Req() request: Request): Promise<AllDevicesDto> {
-    const authorization = request?.headers?.authorization?.replace('Bearer', '')
+    const authorization = request?.headers?.authorization?.split('Bearer ')[1]
 
     return this.devicesService.postDevicesQuery(id, authorization)
   }
@@ -64,7 +64,7 @@ export class DevicesController {
   })
   @ApiHeader({ name: 'x-request-id' })
   postDevicesAction(@Headers('x-request-id') id: string, @Req() request: Request): Promise<AllDevicesDto> {
-    const authorization = request?.headers?.authorization?.replace('Bearer', '')
+    const authorization = request?.headers?.authorization?.split('Bearer ')[1]
 
     return this.devicesService.postDevicesAction(id, authorization)
   }
