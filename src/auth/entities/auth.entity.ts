@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 
+import { Device } from '../../user/devices/entities/device.entity'
 @Entity()
 export class Auth {
   @PrimaryGeneratedColumn()
@@ -17,6 +18,8 @@ export class Auth {
   @Column({ length: 500 })
   token: string
 
+  @OneToMany(() => Device, (device) => device.user)
+  device: number
 
   constructor(id: number, login: string, password: string, code: string, token: string) { }
 }
