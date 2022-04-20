@@ -19,14 +19,8 @@ export class StatusProperties {
   type: string
 
   @Column()
-  retrievable: boolean
-
-  @Column()
-  reportable: boolean
-
-  @Column()
   instance: string
 
   @Column()
-  unit: string
+  value: string
 }

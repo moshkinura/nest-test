@@ -5,6 +5,7 @@ import {
   Headers,
   UseGuards,
   Req,
+  Body,
 } from '@nestjs/common'
 
 import { Request } from 'express'
@@ -18,6 +19,8 @@ import {
 
 import { DevicesService } from './devices.service'
 import { AllDevicesDto } from './dto/all-devices.dto'
+
+import { QueryDto } from './dto/query.dto'
 
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 
@@ -50,10 +53,14 @@ export class DevicesController {
     description: 'the description'
   })
   @ApiHeader({ name: 'x-request-id' })
-  postDevicesQuery(@Headers('x-request-id') id: string, @Req() request: Request): Promise<AllDevicesDto> {
+  postDevicesQuery(
+    @Headers('x-request-id') id: string,
+    @Req() request: Request,
+    @Body() queryDto: QueryDto,
+  ): Promise<AllDevicesDto> {
     const authorization = request?.headers?.authorization?.split('Bearer ')[1]
 
-    return this.devicesService.postDevicesQuery(id, authorization)
+    return this.devicesService.postDevicesQuery(id, authorization, queryDto)
   }
 
   @UseGuards(JwtAuthGuard)
