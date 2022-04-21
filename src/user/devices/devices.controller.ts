@@ -17,12 +17,13 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger'
 
-import { DevicesService } from './devices.service'
+import { DevicesService, DEVICE_STATUS_MAP } from './devices.service'
 import { AllDevicesDto } from './dto/all-devices.dto'
 
 import { QueryDto } from './dto/query.dto'
 
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
+import { AllStatusDto } from './dto/all-status.dto'
 
 @ApiTags('user/devices')
 @Controller({
@@ -57,7 +58,7 @@ export class DevicesController {
     @Headers('x-request-id') id: string,
     @Req() request: Request,
     @Body() queryDto: QueryDto,
-  ): Promise<AllDevicesDto> {
+  ): Promise<AllStatusDto> {
     const authorization = request?.headers?.authorization?.split('Bearer ')[1]
 
     return this.devicesService.postDevicesQuery(id, authorization, queryDto)

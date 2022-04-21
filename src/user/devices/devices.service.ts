@@ -10,6 +10,7 @@ import { CapabilitiesDto, CapInstance, CapUnit, TypeCapabilities } from './dto/c
 
 import { JwtService } from '@nestjs/jwt'
 import { QueryDto } from './dto/query.dto'
+import { AllStatusDto } from './dto/all-status.dto'
 
 export interface PAYLOAD {
   login: string
@@ -144,31 +145,67 @@ export class DevicesService {
     id: string,
     authorization: string,
     queryDto: QueryDto
-  ): Promise<AllDevicesDto> {
+  ): Promise<AllStatusDto> {
     const token = this.jwtService.verify(authorization, { complete: true })
     const payload: PAYLOAD = token.payload
 
     //console.log(queryDto)
     const searchDevice = queryDto.devices
 
+    const devId = searchDevice[0].id // Из списка, получаем 1 устройство и на него выдаем статус
+
     let allStatus = await this.statusRepository.createQueryBuilder('status')
-    .leftJoinAndSelect('status.device', 'device')
-    .leftJoinAndSelect('status.properties', 'status_properties')
-    .leftJoinAndSelect('status.capabilities', 'status_capabilities')
-    .where("device.id = :devId", {devId: searchDevice[0].id})
-    .getMany()
+      .leftJoinAndSelect('status.device', 'device')
+      .leftJoinAndSelect('status.properties', 'status_properties')
+      .leftJoinAndSelect('status.capabilities', 'status_capabilities')
+      .where("device.id = :devId", { devId })
+      .getMany()
 
     console.log(allStatus)
 
-    let allStatusDevices = await this.statusRepository.find(
-      {
-        where: { id: payload.sub },
-        relations: ['device',]
-      }
-    )
+    // XXX кандидат на удаление
+    // let allStatusDevices = await this.statusRepository.find(
+    //   {
+    //     where: { id: payload.sub },
+    //     relations: ['device',]
+    //   }
+    // )
 
-    let devices: DEVICE_MAP[] = []
+    let devices: DEVICE_STATUS_MAP[] = []
 
+    allStatus.forEach((doc) => {
+      console.log(doc.properties)
+      let properties: PropertiesDto[] = []
+      let capabilities: CapabilitiesDto[] = []
+
+      doc.properties.forEach((prop) => {
+        properties.push({
+          type: TypeProperties[prop.type],
+          state: {
+            instance: PropInstance[prop.instance],
+            value: Number(prop.value)
+          }
+        })
+      })
+
+      doc.capabilities.forEach((cap) => {
+        capabilities.push({
+          type: TypeCapabilities[cap.type],
+          state: {
+            instance: CapInstance[cap.instance],
+            value: cap.value,
+          }
+        })
+      })
+
+      devices.push({
+        id: doc.device.id.toString(),
+        properties,
+        capabilities,
+      })
+    })
+
+    console.log(devices)
     // TODO: Возможно код, ниже - костыль... И можно сделать проще...
     // allStatusDevices.forEach((doc) => {
     //   let types: TypeDevice
@@ -245,7 +282,6 @@ export class DevicesService {
     return {
       request_id: id,
       payload: {
-        user_id: payload.sub.toString(),
         devices: devices,
         // [
         //   {

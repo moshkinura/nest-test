@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-import { PayloadDto } from './payload-device.dto'
+import { PayloadStatusDto } from './payload-status.dto'
 
-export class AllDevicesDto {
+export class AllStatusDto {
   @ApiProperty({
     description: 'Headers - "x-request-id" Идентификатор запроса.',
     required: true,
@@ -12,9 +12,9 @@ export class AllDevicesDto {
   @ApiProperty(
     {
       description: 'Массив',
-      type: () => PayloadDto
+      type: () => PayloadStatusDto
     }
   )
-  payload?: PayloadDto
+  payload?: PayloadStatusDto
 
 }

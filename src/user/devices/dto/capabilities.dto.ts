@@ -142,7 +142,7 @@ export class CapabilitiesDto {
   @ApiProperty({
     description: 'Параметры умения.',
   })
-  parameters: {
+  parameters?: {
     split?: boolean
 
     color_model?: ColorModel
@@ -169,5 +169,13 @@ export class CapabilitiesDto {
       max?: number
       precision?: number
     }
+  }
+
+  @ApiProperty({
+    description: 'Параметры умения. В статусе',
+  })
+  state?: {
+    instance: CapInstance,
+    value: boolean
   }
 }

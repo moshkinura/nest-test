@@ -64,10 +64,18 @@ export class PropertiesDto {
   @ApiProperty({
     description: 'Параметры датчика',
   })
-  parameters: {
+  parameters?: {
     instance: PropInstance
     unit: PropUnit
     //TODO: В разработке
     //events: Events[]
+  }
+
+  @ApiProperty({
+    description: 'Параметры датчика в статусе',
+  })
+  state?: {
+    instance: PropInstance
+    value: number
   }
 }

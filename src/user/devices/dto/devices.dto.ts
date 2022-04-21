@@ -39,7 +39,7 @@ export class DevicesDto {
   @ApiProperty({
     description: 'Название устройства.',
   })
-  name: string
+  name?: string
 
   @ApiProperty({
     description: 'Описание устройства.',
@@ -54,7 +54,7 @@ export class DevicesDto {
   @ApiProperty({
     description: 'Тип устройства.',
   })
-  type: TypeDevice
+  type?: TypeDevice
 
   @ApiProperty({
     description: 'Объект, который состоит из набора пар "ключ":"значение" любой вложенности и представляет собой дополнительную информацию об устройстве.',
@@ -76,4 +76,14 @@ export class DevicesDto {
     type: () => DeviceInfoDto
   })
   device_info?: DeviceInfoDto
+
+  @ApiProperty({
+    description: 'Код возможной ошибки из списка. Если поле непустое, параметры capabilities и properties будут проигнорированы.',
+  })
+  error_code?: string
+
+  @ApiProperty({
+    description: 'Расширенное человекочитаемое описание возможной ошибки.',
+  })
+  error_message?: string
 }
